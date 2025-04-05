@@ -1,0 +1,13 @@
+/* 移除红色边框和背景色 */
+.success-cases {
+  border: none !important;  
+  height: auto !important;  
+  background: transparent !important;  
+}
+
+/* 保持图片原始颜色和形态 */
+.case-item img {
+  filter: none !important;  /* 确保颜色不变 */
+  background-color: transparent !important;
+  transform: none !important;  /* 取消倾斜、旋转等变形 */
+}

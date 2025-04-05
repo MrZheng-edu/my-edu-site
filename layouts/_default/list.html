@@ -1,0 +1,85 @@
+{{- define "main" }}
+
+{{- if (and site.Params.profileMode.enabled .IsHome) }}
+  {{- partial "index_profile.html" . }}
+{{- else }}
+
+  {{- if not .IsHome | and .Title }}
+  <header class="page-header">
+    {{- if .Description }}
+    <div class="post-description">
+      {{ .Description | markdownify }}
+    </div>
+    {{- end }}
+  </header>
+  {{- end }}
+
+  {{- if .Content }}
+  <div class="post-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+      {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  {{- $pages := union .RegularPages .Sections }}
+
+  {{- if .IsHome }}
+    {{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
+    {{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true"  }}
+  {{- end }}
+
+  {{- $paginator := .Paginate $pages | default nil }}
+
+  {{/* ✅ 只在不是 "院校选择"、、"研学&夏令营"、"成功案例"、"签证&翻译&公证"、"联系我们" 的页面显示文章列表 */}}
+  {{- if and $paginator (not (or (eq .Title "关于我们")  (eq .Title "首页")  (eq .Title "院校选择") (eq .Title "俄罗斯") (eq .Title "白俄罗斯") (eq .Title "蒙古") 
+    (eq .Title "中亚")  (eq .Title "首都明斯克地区")  (eq .Title "非首都地区")  (eq .Title "莫斯科")  (eq .Title "圣彼得堡")  (eq .Title "伏尔加联邦管区") 
+    (eq .Title "西伯利亚联邦管区")  (eq .Title "远东地区")  (eq .Title "研学&夏令营") (eq .Title "成功案例") (eq .Title "签证&翻译&公证") (eq .Title "联系我们"))) }}
+    {{- range $paginator.Pages }}
+      <article class="post-entry">
+        <header class="entry-header">
+          <h2 class="entry-hint-parent">
+            <a href="{{ .Permalink }}">{{ .Title }}</a>
+          </h2>
+        </header>
+        {{- if (ne (.Param "hideSummary") true) }}
+        <div class="entry-content">
+          <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+        </div>
+        {{- end }}
+        {{- if not (.Param "hideMeta") }}
+        <footer class="entry-footer">
+          {{- partial "post_meta.html" . -}}
+        </footer>
+        {{- end }}
+        <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+      </article>
+    {{- end }}
+  {{- end }}
+
+  {{- if and $paginator (gt $paginator.TotalPages 1) (not (or (eq .Title "合作院校") (eq .Title "成功案例") (eq .Title "签证&翻译&公证"))) }}
+  <footer class="page-footer">
+    <nav class="pagination">
+      {{- if $paginator.HasPrev }}
+      <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">
+        «&nbsp;{{ i18n "prev_page" }}&nbsp;
+        {{- if (.Param "ShowPageNums") }}
+          {{- sub $paginator.PageNumber 1 }}/{{ $paginator.TotalPages }}
+        {{- end }}
+      </a>
+      {{- end }}
+      {{- if $paginator.HasNext }}
+      <a class="next" href="{{ $paginator.Next.URL | absURL }}">
+        {{- i18n "next_page" }}&nbsp;
+        {{- if (.Param "ShowPageNums") }}
+          {{- add 1 $paginator.PageNumber }}/{{ $paginator.TotalPages }}
+        {{- end }}&nbsp;»
+      </a>
+      {{- end }}
+    </nav>
+  </footer>
+  {{- end }}
+
+{{- end }}{{/* end profileMode */}}
+
+{{- end }}{{- /* end main */ -}}

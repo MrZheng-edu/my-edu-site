@@ -1,0 +1,79 @@
+{{- /* 定义常用变量 */ -}}
+{{- $pageurl := .Permalink -}}
+{{- $title := .Title -}}
+
+{{- /* 如果你想用文中标签作为分享hashtags，可以留用这段，否则可删除 */ -}}
+{{- $.Scratch.Set "tags" "" -}}
+{{- with .Params.Tags }}
+{{- $hashtags := newScratch -}}
+{{- range . }}
+{{- $hashtags.Add "tags" (slice (replaceRE "(\\s)" "" . )) -}}
+{{- end }}
+{{- $.Scratch.Set "tags" (delimit ($hashtags.Get "tags") ",") }}
+{{- end -}}
+
+{{- /* 判断是否自定义 ShareButtons 参数 */ -}}
+{{- $custom := false -}}
+{{- $ShareButtons := (.Param "ShareButtons") -}}
+{{- with $ShareButtons }}{{ $custom = true }}{{ end }}
+
+<ul class="share-buttons">
+    {{- /* ======== 微博 ======== */ -}}
+    {{- if (cond ($custom) (in $ShareButtons "weibo") (true)) }}
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="分享 {{ $title | plainify }} 到微博"
+            href="http://service.weibo.com/share/share.php?url={{ $pageurl }}&title={{ $title }}">
+            <!-- 这里示例使用 Font Awesome 的微博图标 -->
+            <i class="fab fa-weibo"></i>
+        </a>
+    </li>
+    {{- end }}
+
+    {{- /* ======== QQ ======== */ -}}
+    {{- if (cond ($custom) (in $ShareButtons "qq") (true)) }}
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="分享 {{ $title | plainify }} 到 QQ"
+            href="https://connect.qq.com/widget/shareqq/index.html?url={{ $pageurl }}&title={{ $title }}&summary={{ $title }}">
+            <!-- 这里示例使用 Font Awesome 的 QQ 图标 -->
+            <i class="fab fa-qq"></i>
+        </a>
+    </li>
+    {{- end }}
+
+    {{- /* ======== 微信（二维码） ======== */ -}}
+    {{- if (cond ($custom) (in $ShareButtons "wechat") (true)) }}
+    <!-- 微信按钮：使用 qr.liantu.com 免费 API -->
+
+    <script src="/js/qrcode.min.js"></script>
+    <li>
+        <a href="javascript:void(0)" onclick="openWeChatShare()">
+            <i class="fab fa-weixin"></i>
+        </a>
+    </li>
+    <div id="wechat-modal" style="display:none;">
+        <div id="qrcode"></div>
+    </div>
+    <script>
+        function openWeChatShare() {
+            document.getElementById('wechat-modal').style.display = 'block';
+            new QRCode(document.getElementById('qrcode'), {
+                text: "{{ .Permalink }}",
+                width: 128,
+                height: 128
+            });
+        }
+    </script>
+
+
+    {{- end }}
+
+    {{- /* ======== WhatsApp ======== */ -}}
+    {{- if (cond ($custom) (in $ShareButtons "whatsapp") (true)) }}
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="分享 {{ $title | plainify }} 到 WhatsApp"
+            href="https://api.whatsapp.com/send?text={{ $title }}%20-%20{{ $pageurl }}">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </li>
+    {{- end }}
+</ul>

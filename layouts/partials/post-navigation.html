@@ -1,0 +1,10 @@
+{{ if .Site.Params.ShowPostNavLinks }}
+<nav class="post-navigation">
+    {{ with .PrevInSection }}
+    <a class="prev-post" href="{{ .Permalink }}">← 上一篇：{{ .Title }}</a>
+    {{ end }}
+    {{ with .NextInSection }}
+    <a class="next-post" href="{{ .Permalink }}">下一篇：{{ .Title }} →</a>
+    {{ end }}
+</nav>
+{{ end }}

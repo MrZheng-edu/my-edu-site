@@ -1,0 +1,70 @@
+baseURL = "https://yourdomain.com/"
+languageCode = "zh-cn"
+title = "羽翼飞国际教育"
+theme = "PaperMod"
+
+[params]
+  ShowBreadCrumbs = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowReadingTime = false
+  paginate = 6
+
+  [params.cover]  # ✅ 这里需要 `[]` 来定义嵌套表
+    linkFullImages = true  # ✅ 这里 `true` 不能加引号，应该是布尔值
+
+  [params.label]
+  icon = "img/yyflogo.png"
+  iconHeight = 50
+
+  customCSS = ["css/extended/custom.css"]  # 必须与文件路径完全一致
+
+  assetsDisable = ["fontawesome"]  # 仅禁用FontAwesome
+
+[outputs]
+  home = ["HTML"]
+  section = ["HTML"]   # ✅ 这里确保 section 只输出 HTML
+  taxonomy = ["HTML"]
+  term = ["HTML"]
+
+[menu]
+  [[menu.main]]
+    identifier = "关于我们"
+    name = "关于我们"
+    url = "/关于我们/"
+    weight = 10
+
+ [[menu.main]]
+    identifier = "院校选择"
+    name = "院校选择"
+    url = "/院校选择/"
+    weight = 20
+
+ [[menu.main]]
+    identifier = "研学&夏令营"
+    name = "研学&夏令营"
+    url = "/研学&夏令营/"
+    weight = 30
+
+  [[menu.main]]
+    identifier = "成功案例"
+    name = "成功案例"
+    url = "/成功案例/"
+    weight = 40
+
+ [[menu.main]]
+    identifier = "签证&翻译&公证"
+    name = "签证&翻译&公证"
+    url = "/签证&翻译&公证/"
+    weight = 50
+
+ [[menu.main]]
+    identifier = "联系我们"
+    name = "联系我们"
+    url = "/联系我们/"
+    weight = 60
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
