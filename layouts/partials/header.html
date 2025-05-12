@@ -43,9 +43,7 @@
     <nav class="nav">
         <div class="logo">
             <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ site.Title }}">
-                <img src="{{ "img/yyflogo.png" | absURL }}" alt="Company Logo" height="50">
-
-
+                <img src="{{ .Site.Params.label.icon | absURL }}" alt="Site Logo" height="{{ .Site.Params.label.iconHeight }}">
             </a>
         </div>
 
